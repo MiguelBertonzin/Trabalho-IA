@@ -17,79 +17,76 @@ def carregar_casos():
 def prever_diagnostico(novo_caso):
     dados = carregar_casos()
 
-    # Usa as mesmas colunas do banco
-    colunas = ['temp_corporea', 'dur_febre', 'idade', 'dor_articular', 'int_dor_articular',
-               'dor_cabeca_freq', 'dor_cabeca_int', 'manchas', 'coceira', 'conjuntivite',
-               'dor_musculo', 'edema_art', 'hipertrofia_ganglionar', 'plaquetas']
-
-    X = dados[colunas]
+    # Seleciona os atributos de entrada (sem o diagnóstico)
+    X = dados[['febre', 'dor_articular', 'manchas', 'coceira', 'conjuntivite', 'plaquetas']]
     y = dados['diagnostico']
 
-    novo_df = pd.DataFrame([novo_caso])[colunas]
+    # Novo caso como DataFrame
+    novo_df = pd.DataFrame([novo_caso])
 
+    # Cálculo da distância euclidiana
     distancias = euclidean_distances(X, novo_df)
     indice_similar = distancias.argmin()
 
+    # Retorna o diagnóstico mais próximo
     return y.iloc[indice_similar]
 
-# Casos de teste
+# Executar vários testes simulados
 if __name__ == '__main__':
     casos_teste = [
         {
             'nome': 'Caso 1 (suspeita de Zika)',
             'dados': {
-                'temp_corporea': 37.4,
-                'dur_febre': 4,
-                'idade': 29,
+                'febre': 1,
                 'dor_articular': 0,
-                'int_dor_articular': 0,
-                'dor_cabeca_freq': 5,
-                'dor_cabeca_int': 5,
                 'manchas': 1,
                 'coceira': 1,
                 'conjuntivite': 1,
-                'dor_musculo': 0,
-                'edema_art': 0,
-                'hipertrofia_ganglionar': 1,
-                'plaquetas': 165000
+                'plaquetas': 160000
             }
         },
         {
             'nome': 'Caso 2 (suspeita de Dengue)',
             'dados': {
-                'temp_corporea': 38.5,
-                'dur_febre': 6,
-                'idade': 21,
+                'febre': 1,
                 'dor_articular': 1,
-                'int_dor_articular': 8,
-                'dor_cabeca_freq': 6,
-                'dor_cabeca_int': 7,
                 'manchas': 0,
                 'coceira': 0,
                 'conjuntivite': 0,
-                'dor_musculo': 1,
-                'edema_art': 0,
-                'hipertrofia_ganglionar': 0,
-                'plaquetas': 130000
+                'plaquetas': 125000
             }
         },
         {
             'nome': 'Caso 3 (suspeita de Chikungunya)',
             'dados': {
-                'temp_corporea': 38.0,
-                'dur_febre': 3,
-                'idade': 33,
+                'febre': 1,
                 'dor_articular': 1,
-                'int_dor_articular': 9,
-                'dor_cabeca_freq': 3,
-                'dor_cabeca_int': 4,
-                'manchas': 1,
+                'manchas': 0,
                 'coceira': 0,
                 'conjuntivite': 0,
-                'dor_musculo': 1,
-                'edema_art': 1,
-                'hipertrofia_ganglionar': 1,
-                'plaquetas': 190000
+                'plaquetas': 210000
+            }
+        },
+        {
+            'nome': 'Caso 4 (caso leve, possível Zika)',
+            'dados': {
+                'febre': 0,
+                'dor_articular': 0,
+                'manchas': 1,
+                'coceira': 1,
+                'conjuntivite': 1,
+                'plaquetas': 175000
+            }
+        },
+        {
+            'nome': 'Caso 5 (caso ambíguo)',
+            'dados': {
+                'febre': 1,
+                'dor_articular': 1,
+                'manchas': 1,
+                'coceira': 1,
+                'conjuntivite': 0,
+                'plaquetas': 150000
             }
         }
     ]
